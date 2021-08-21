@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RegisterTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     /**
      * @test
@@ -36,7 +36,7 @@ class RegisterTest extends TestCase
     public function user_must_enter_valid_email_while_registration()
     {
         $this->postJson(route("auth.register"), [
-            "email" => "invalid_email"
+            "email" => $this->faker->word
         ])
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonValidationErrors([

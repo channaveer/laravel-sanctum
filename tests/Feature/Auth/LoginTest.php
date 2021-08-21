@@ -12,7 +12,7 @@ use Laravel\Sanctum\Sanctum;
 
 class LoginTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     /**
      * 
@@ -35,7 +35,7 @@ class LoginTest extends TestCase
     public function user_cannot_login_if_email_is_not_valid()
     {
         $this->postJson(route("auth.authenticate"), [
-            "email" => "channaveer",
+            "email" => $this->faker->word,
         ])
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonValidationErrors([
@@ -53,7 +53,7 @@ class LoginTest extends TestCase
 
         $this->postJson(route("auth.authenticate"), [
             "email" => $user->email,
-            "password" => "test@123"
+            "password" => $this->faker->password
         ])
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
@@ -65,13 +65,11 @@ class LoginTest extends TestCase
     {
         $user = User::factory()
             ->unverifiedEmail()
-            ->create([
-                "password" => "password"
-            ]);
+            ->create();
 
-        $response = $this->postJson(route("auth.authenticate"), [
+        $this->postJson(route("auth.authenticate"), [
             "email" => $user->email,
-            "password" => "password"
+            "password" => $this->faker->password
         ])
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
@@ -85,13 +83,11 @@ class LoginTest extends TestCase
     {
         $user = User::factory()
             ->isBlocked()
-            ->create([
-                "password" => "password"
-            ]);
+            ->create();
 
         $this->postJson(route("auth.authenticate"), [
             "email" => $user->email,
-            "password" => "password"
+            "password" => $this->faker->password
         ])
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
@@ -120,7 +116,7 @@ class LoginTest extends TestCase
     /**
      * @test
      */
-    public function logged_user_can_logout()
+    public function login_user_can_logout()
     {
         $user = User::factory()
             ->create([

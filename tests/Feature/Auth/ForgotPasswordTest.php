@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ForgotPasswordTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
     /**
      * @test
      */
@@ -34,7 +34,7 @@ class ForgotPasswordTest extends TestCase
     public function a_user_cannot_request_reset_password_if_email_is_not_valid()
     {
         $this->postJson(route("auth.forgot-password"), [
-            "email" => "channaveer"
+            "email" => $this->faker->word
         ])
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonValidationErrors([

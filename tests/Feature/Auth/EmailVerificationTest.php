@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class EmailVerificationTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     /**
      * @test
@@ -40,8 +40,8 @@ class EmailVerificationTest extends TestCase
         $passwordReset = PasswordReset::factory()->create();
 
         $this->postJson(route("auth.account-verification"), [
-            "email" => "channaveer",
-            "token" => "token123",
+            "email" => $this->faker->email,
+            "token" => $this->faker->uuid,
         ])
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
