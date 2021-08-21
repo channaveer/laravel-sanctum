@@ -18,7 +18,7 @@ class RegisterTest extends TestCase
      */
     public function user_needs_fill_the_required_fields_to_register()
     {
-        $this->postJson("/api/auth/register")
+        $this->postJson(route("auth.register"))
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonValidationErrors([
                 "name",
@@ -35,7 +35,7 @@ class RegisterTest extends TestCase
      */
     public function user_must_enter_valid_email_while_registration()
     {
-        $this->postJson("/api/auth/register", [
+        $this->postJson(route("auth.register"), [
             "email" => "invalid_email"
         ])
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -51,7 +51,7 @@ class RegisterTest extends TestCase
      */
     public function password_and_confirm_password_must_match_while_registration()
     {
-        $this->postJson("/api/auth/register", [
+        $this->postJson(route("auth.register"), [
             "password" => "password@123",
             "confirm_password" => "password"
         ])
@@ -77,7 +77,7 @@ class RegisterTest extends TestCase
             "confirm_password" => "password"
         ];
 
-        $this->postJson("/api/auth/register", $user)
+        $this->postJson(route("auth.register"), $user)
             ->assertStatus(Response::HTTP_OK);
 
         $this->assertDatabaseHas("users", [

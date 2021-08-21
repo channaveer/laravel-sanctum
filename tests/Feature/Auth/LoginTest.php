@@ -20,7 +20,7 @@ class LoginTest extends TestCase
      */
     public function user_must_fill_required_fields()
     {
-        $this->postJson("/api/auth/authenticate")
+        $this->postJson(route("auth.authenticate"))
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonValidationErrors([
                 "email",
@@ -34,7 +34,7 @@ class LoginTest extends TestCase
      */
     public function user_cannot_login_if_email_is_not_valid()
     {
-        $this->postJson("/api/auth/authenticate", [
+        $this->postJson(route("auth.authenticate"), [
             "email" => "channaveer",
         ])
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -51,7 +51,7 @@ class LoginTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $this->postJson("/api/auth/authenticate", [
+        $this->postJson(route("auth.authenticate"), [
             "email" => $user->email,
             "password" => "test@123"
         ])
@@ -69,7 +69,7 @@ class LoginTest extends TestCase
                 "password" => "password"
             ]);
 
-        $response = $this->postJson("/api/auth/authenticate", [
+        $response = $this->postJson(route("auth.authenticate"), [
             "email" => $user->email,
             "password" => "password"
         ])
@@ -89,7 +89,7 @@ class LoginTest extends TestCase
                 "password" => "password"
             ]);
 
-        $this->postJson("/api/auth/authenticate", [
+        $this->postJson(route("auth.authenticate"), [
             "email" => $user->email,
             "password" => "password"
         ])
@@ -108,7 +108,7 @@ class LoginTest extends TestCase
                 "password" => "password"
             ]);
 
-        $this->postJson("/api/auth/authenticate", [
+        $this->postJson(route("auth.authenticate"), [
             "email" => $user->email,
             "password" => "password"
         ])
@@ -120,14 +120,14 @@ class LoginTest extends TestCase
     /**
      * @test
      */
-    public function a_login_user_can_logout()
+    public function logged_user_can_logout()
     {
         $user = User::factory()
             ->create([
                 "password" => "password"
             ]);
 
-        $loggedInUserResponse = $this->postJson("/api/auth/authenticate", [
+        $loggedInUserResponse = $this->postJson(route("auth.authenticate"), [
             "email" => $user->email,
             "password" => "password"
         ])
