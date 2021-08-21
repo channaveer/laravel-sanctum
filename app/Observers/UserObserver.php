@@ -11,4 +11,9 @@ class UserObserver
     {
         $user->password = Hash::make($user->password);
     }
+
+    public function updating(User $user)
+    {
+        $user->password = Hash::make($user->password);
+    }
 }
