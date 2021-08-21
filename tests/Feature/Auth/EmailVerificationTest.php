@@ -20,7 +20,7 @@ class EmailVerificationTest extends TestCase
     {
         $passwordReset = PasswordReset::factory()->create();
 
-        $this->postJson("/api/auth/account-verification")
+        $this->postJson(route("auth.account-verification"))
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonValidationErrors([
                 "email",
@@ -39,7 +39,7 @@ class EmailVerificationTest extends TestCase
     {
         $passwordReset = PasswordReset::factory()->create();
 
-        $this->postJson("/api/auth/account-verification", [
+        $this->postJson(route("auth.account-verification"), [
             "email" => "channaveer",
             "token" => "token123",
         ])
@@ -58,7 +58,7 @@ class EmailVerificationTest extends TestCase
         $passwordReset = PasswordReset::factory()->create();
 
         /** Verify user account by sending proper TOKEN & EMAIL */
-        $this->postJson("/api/auth/account-verification", [
+        $this->postJson(route("auth.account-verification"), [
             "token" => $passwordReset->token,
             "email" => $passwordReset->email
 

@@ -18,7 +18,7 @@ class ForgotPasswordTest extends TestCase
      */
     public function user_needs_to_fill_required_details()
     {
-        $this->postJson("/api/auth/forgot-password")
+        $this->postJson(route("auth.forgot-password"))
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonValidationErrors([
                 "email"
@@ -33,7 +33,7 @@ class ForgotPasswordTest extends TestCase
      */
     public function a_user_cannot_request_reset_password_if_email_is_not_valid()
     {
-        $this->postJson("/api/auth/forgot-password", [
+        $this->postJson(route("auth.forgot-password"), [
             "email" => "channaveer"
         ])
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -53,7 +53,7 @@ class ForgotPasswordTest extends TestCase
 
         $user = User::factory()->create();
 
-        $this->postJson("/api/auth/forgot-password", [
+        $this->postJson(route("auth.forgot-password"), [
             "email" => $user->email
         ])
             ->assertStatus(Response::HTTP_OK);
