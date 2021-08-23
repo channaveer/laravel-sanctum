@@ -6,7 +6,6 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\PasswordReset;
 use App\Events\ResetPasswordEvent;
-use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -121,6 +120,8 @@ class ResetPasswordTest extends TestCase
      */
     public function reset_password()
     {
+        $this->markTestIncomplete("Write code and tests to send mail and listeners too.");
+
         Event::fake([
             ResetPasswordEvent::class
         ]);

@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ForgotPasswordTest extends TestCase
+class ForgotPasswordControllerTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
     /**
@@ -49,6 +49,8 @@ class ForgotPasswordTest extends TestCase
      */
     public function password_reset_details_are_sent_if_reset_password_details_are_correct()
     {
+        $this->markTestIncomplete("Write code and tests to send mail and listeners too.");
+
         Bus::fake();
 
         $user = User::factory()->create();

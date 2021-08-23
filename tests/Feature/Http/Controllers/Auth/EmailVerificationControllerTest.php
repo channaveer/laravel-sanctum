@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class EmailVerificationTest extends TestCase
+class EmailVerificationControllerTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
@@ -55,6 +55,8 @@ class EmailVerificationTest extends TestCase
      */
     public function account_verified()
     {
+        $this->markTestIncomplete("Write code and test to send welcome on board to users.");
+
         $passwordReset = PasswordReset::factory()->create();
 
         /** Verify user account by sending proper TOKEN & EMAIL */

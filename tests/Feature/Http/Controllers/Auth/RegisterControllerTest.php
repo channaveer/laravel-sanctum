@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class RegisterTest extends TestCase
+class RegisterPasswordControllerTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
@@ -66,8 +66,10 @@ class RegisterTest extends TestCase
     /**
      * @test
      */
-    public function user_with_valid_registration_details_can_register()
+    public function user_can_register()
     {
+        $this->markTestIncomplete("Write code and tests to send mail and listeners too.");
+
         Event::fake();
 
         $user = [

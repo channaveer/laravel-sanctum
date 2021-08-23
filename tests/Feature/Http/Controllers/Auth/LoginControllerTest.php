@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 
-class LoginTest extends TestCase
+class LoginControllerTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
@@ -96,8 +96,10 @@ class LoginTest extends TestCase
     /**
      * @test
      */
-    public function user_with_valid_credentials_can_login()
+    public function user_can_login()
     {
+        $this->markTestIncomplete("Write and test code to limit login attempts.");
+
         $user = User::factory()
             ->create([
                 "password" => "password"
@@ -115,7 +117,16 @@ class LoginTest extends TestCase
     /**
      * @test
      */
-    public function login_user_can_logout()
+    public function a_non_logged_in_user_cannot_logout()
+    {
+        $this->postJson(route("auth.logout"))
+            ->assertStatus(Response::HTTP_UNAUTHORIZED);
+    }
+
+    /**
+     * @test
+     */
+    public function user_can_logout()
     {
         $user = User::factory()
             ->create([
@@ -134,7 +145,7 @@ class LoginTest extends TestCase
 
         Sanctum::actingAs($loggedInUser["data"]["user"]);
 
-        $this->postJson("/api/auth/logout", [])
+        $this->postJson(route("auth.logout"))
             ->assertStatus(Response::HTTP_OK);
 
         $this->assertDatabaseCount("personal_access_tokens", 0);
