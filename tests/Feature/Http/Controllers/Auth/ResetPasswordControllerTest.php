@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ResetPasswordTest extends TestCase
+class ResetPasswordControllerTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
