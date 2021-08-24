@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class RegisterPasswordControllerTest extends TestCase
+class RegisterControllerTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
