@@ -59,7 +59,7 @@ class ResetPasswordController extends Controller
 
             return response()->json([
                 "status"    => "success",
-                "message"   => "User account verified successfully",
+                "message"   => "User password reset successfully",
             ], Response::HTTP_OK);
         } catch (Exception $e) {
             return response()->json([
