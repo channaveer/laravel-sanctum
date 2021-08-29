@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\User;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\FormRequest;
 
 class ResetPasswordRequest extends FormRequest
 {
