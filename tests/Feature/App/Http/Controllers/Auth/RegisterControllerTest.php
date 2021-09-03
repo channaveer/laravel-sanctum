@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Auth;
+namespace Tests\Feature\App\Http\Controllers\Auth;
 
 use Tests\TestCase;
 use App\Events\UserRegisteredEvent;

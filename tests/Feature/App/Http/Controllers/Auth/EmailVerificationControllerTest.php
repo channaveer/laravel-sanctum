@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Auth;
+namespace Tests\Feature\App\Http\Controllers\Auth;
 
 use App\Models\PasswordReset;
 use Tests\TestCase;
