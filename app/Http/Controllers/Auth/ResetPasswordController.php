@@ -23,7 +23,7 @@ class ResetPasswordController extends Controller
 
             return response()->json([
                 "status"    => "success",
-                "message"   => "User account verified successfully",
+                "message"   => "User token details verified successfully",
                 "data"      => [
                     "email" => $request->get("email"),
                     "token" => $request->get("token")
