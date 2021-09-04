@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Http\Controllers\Auth;
 
 use Tests\TestCase;
+use App\Models\User;
 use App\Events\UserRegisteredEvent;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -61,6 +62,20 @@ class RegisterControllerTest extends TestCase
             ]);
 
         $this->assertDatabaseCount("users", 0);
+    }
+
+    /**
+     * @test
+     */
+    public function user_email_must_be_unique()
+    {
+        User::factory()->create(["email" => "channaveer@gmail.com"]);
+
+        $newUser = User::factory()->raw(["email" => "channaveer@gmail.com"]);
+
+        $this->postJson(route("auth.register"), $newUser)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonValidationErrors(["email"]);
     }
 
     /**
