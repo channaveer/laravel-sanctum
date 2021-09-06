@@ -28,7 +28,7 @@ class EmailVerificationController extends Controller
 
             return response()->json([
                 "status"    => "success",
-                "message"   => "User account verified successfully",
+                "message"   => __("auth.account_verified"),
             ], Response::HTTP_OK);
         } catch (Exception $e) {
             return response()->json([

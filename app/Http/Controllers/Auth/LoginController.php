@@ -20,22 +20,22 @@ class LoginController extends Controller
             $user = $userService->getByEmail($request->get("email"));
 
             if ($user->is_blocked) {
-                throw new UserIsBlockedException("You have been blocked.");
+                throw new UserIsBlockedException(__("auth.blocked"));
             }
 
             if (!$user->is_email_verified) {
-                throw new UserEmailNotVerifiedException("Your email is not verified.");
+                throw new UserEmailNotVerifiedException(__("auth.email_not_verified"));
             }
 
             if (!Hash::check($request->get("password"), $user->password)) {
-                throw new Exception("Invalid email/password.");
+                throw new Exception(__("auth.invalid_credentials"));
             }
 
             $token = $user->createToken("user-details");
 
             return response()->json([
                 "status"    => "success",
-                "message"   => "User authenticated successfully",
+                "message"   => __("auth.success"),
                 "data"      => [
                     "user"  => $user,
                     "token" => $token->plainTextToken
@@ -58,7 +58,7 @@ class LoginController extends Controller
 
         return response()->json([
             "status"    => "success",
-            "message"   => "User logged out successfully",
+            "message"   => __("auth.logout_success"),
         ], Response::HTTP_OK);
     }
 }

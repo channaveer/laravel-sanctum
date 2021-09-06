@@ -27,7 +27,7 @@ class ForgotPasswordController extends Controller
 
         return response()->json([
             "status" => "success",
-            "message" => "Reset password details sent to registered mail.",
+            "message" => __("auth.password_reset_mail_success"),
         ]);
     }
 }

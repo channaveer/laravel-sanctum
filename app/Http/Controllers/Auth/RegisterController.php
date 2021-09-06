@@ -25,7 +25,7 @@ class RegisterController extends Controller
 
             return response()->json([
                 "status"    => "success",
-                "message"   => "User registered successfully",
+                "message"   => __("auth.registration_success"),
                 "data"      => [
                     "user"  => $user,
                 ]
