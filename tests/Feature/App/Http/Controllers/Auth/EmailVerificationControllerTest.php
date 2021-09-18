@@ -16,44 +16,7 @@ class EmailVerificationControllerTest extends TestCase
     /**
      * @test
      */
-    public function email_and_token_are_required_to_verify_account()
-    {
-        $passwordReset = PasswordReset::factory()->create();
-
-        $this->postJson(route("auth.account-verification"))
-            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJsonValidationErrors([
-                "email",
-                "token"
-            ]);
-
-        $this->assertDatabaseHas("password_resets", [
-            "token" => $passwordReset->token
-        ]);
-    }
-
-    /**
-     * @test
-     */
-    public function user_account_must_not_be_verified_if_email_or_token_is_wrong()
-    {
-        $passwordReset = PasswordReset::factory()->create();
-
-        $this->postJson(route("auth.account-verification"), [
-            "email" => $this->faker->email,
-            "token" => $this->faker->uuid,
-        ])
-            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-
-        $this->assertDatabaseHas("password_resets", [
-            "token" => $passwordReset->token
-        ]);
-    }
-
-    /**
-     * @test
-     */
-    public function account_verified()
+    public function an_user_account_is_verified()
     {
         $this->markTestIncomplete("Write code and test to send welcome on board to users.");
 
@@ -73,6 +36,43 @@ class EmailVerificationControllerTest extends TestCase
 
         /** Make sure that the token get deleted after account verification */
         $this->assertDatabaseMissing("password_resets", [
+            "token" => $passwordReset->token
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function it_requires_email_and_token_to_verify_account()
+    {
+        $passwordReset = PasswordReset::factory()->create();
+
+        $this->postJson(route("auth.account-verification"))
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonValidationErrors([
+                "email",
+                "token"
+            ]);
+
+        $this->assertDatabaseHas("password_resets", [
+            "token" => $passwordReset->token
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function it_must_not_verify_account_when_email_or_token_is_wrong()
+    {
+        $passwordReset = PasswordReset::factory()->create();
+
+        $this->postJson(route("auth.account-verification"), [
+            "email" => $this->faker->email,
+            "token" => $this->faker->uuid,
+        ])
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        $this->assertDatabaseHas("password_resets", [
             "token" => $passwordReset->token
         ]);
     }

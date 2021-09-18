@@ -13,41 +13,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class ForgotPasswordControllerTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
-    /**
-     * @test
-     */
-    public function user_needs_to_fill_required_details()
-    {
-        $this->postJson(route("auth.forgot-password"))
-            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJsonValidationErrors([
-                "email"
-            ]);
-
-        $this->assertDatabaseCount("password_resets", 0);
-    }
-
 
     /**
      * @test
      */
-    public function a_user_cannot_request_reset_password_if_email_is_not_valid()
-    {
-        $this->postJson(route("auth.forgot-password"), [
-            "email" => $this->faker->word
-        ])
-            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJsonValidationErrors([
-                "email"
-            ]);
-
-        $this->assertDatabaseCount("password_resets", 0);
-    }
-
-    /**
-     * @test
-     */
-    public function password_reset_details_are_sent_if_reset_password_details_are_correct()
+    public function password_reset_details_are_sent()
     {
         $this->markTestIncomplete("Write code and tests to send mail and listeners too.");
 
@@ -65,5 +35,36 @@ class ForgotPasswordControllerTest extends TestCase
         ]);
 
         Bus::assertDispatched(ResetPasswordJob::class);
+    }
+
+    /**
+     * @test
+     */
+    public function it_requires_validation_fields()
+    {
+        $this->postJson(route("auth.forgot-password"))
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonValidationErrors([
+                "email"
+            ]);
+
+        $this->assertDatabaseCount("password_resets", 0);
+    }
+
+
+    /**
+     * @test
+     */
+    public function it_must_not_allow_to_reset_password_if_email_is_invalid()
+    {
+        $this->postJson(route("auth.forgot-password"), [
+            "email" => $this->faker->word
+        ])
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonValidationErrors([
+                "email"
+            ]);
+
+        $this->assertDatabaseCount("password_resets", 0);
     }
 }

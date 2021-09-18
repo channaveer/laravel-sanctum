@@ -17,70 +17,6 @@ class RegisterControllerTest extends TestCase
     /**
      * @test
      */
-    public function user_needs_fill_the_required_fields_to_register()
-    {
-        $this->postJson(route("auth.register"))
-            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJsonValidationErrors([
-                "name",
-                "email",
-                "password",
-                "confirm_password"
-            ]);
-
-        $this->assertDatabaseCount("users", 0);
-    }
-
-    /**
-     * @test
-     */
-    public function user_must_enter_valid_email_while_registration()
-    {
-        $this->postJson(route("auth.register"), [
-            "email" => $this->faker->word
-        ])
-            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJsonValidationErrors([
-                "email",
-            ]);
-
-        $this->assertDatabaseCount("users", 0);
-    }
-
-    /**
-     * @test
-     */
-    public function password_and_confirm_password_must_match_while_registration()
-    {
-        $this->postJson(route("auth.register"), [
-            "password" => "password@123",
-            "confirm_password" => "password"
-        ])
-            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJsonValidationErrors([
-                "confirm_password"
-            ]);
-
-        $this->assertDatabaseCount("users", 0);
-    }
-
-    /**
-     * @test
-     */
-    public function user_email_must_be_unique()
-    {
-        User::factory()->create(["email" => "channaveer@gmail.com"]);
-
-        $newUser = User::factory()->raw(["email" => "channaveer@gmail.com"]);
-
-        $this->postJson(route("auth.register"), $newUser)
-            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJsonValidationErrors(["email"]);
-    }
-
-    /**
-     * @test
-     */
     public function user_can_register()
     {
         $this->markTestIncomplete("Write code and tests to send mail and listeners too.");
@@ -108,5 +44,69 @@ class RegisterControllerTest extends TestCase
         $this->assertDatabaseCount("password_resets", 1);
 
         Event::assertDispatched(UserRegisteredEvent::class);
+    }
+
+    /**
+     * @test
+     */
+    public function it_requires_validation_fields()
+    {
+        $this->postJson(route("auth.register"))
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonValidationErrors([
+                "name",
+                "email",
+                "password",
+                "confirm_password"
+            ]);
+
+        $this->assertDatabaseCount("users", 0);
+    }
+
+    /**
+     * @test
+     */
+    public function it_must_have_valid_email()
+    {
+        $this->postJson(route("auth.register"), [
+            "email" => $this->faker->word
+        ])
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonValidationErrors([
+                "email",
+            ]);
+
+        $this->assertDatabaseCount("users", 0);
+    }
+
+    /**
+     * @test
+     */
+    public function it_must_match_password_and_confirm_password()
+    {
+        $this->postJson(route("auth.register"), [
+            "password" => "password@123",
+            "confirm_password" => "password"
+        ])
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonValidationErrors([
+                "confirm_password"
+            ]);
+
+        $this->assertDatabaseCount("users", 0);
+    }
+
+    /**
+     * @test
+     */
+    public function it_must_have_unique_email()
+    {
+        User::factory()->create(["email" => "channaveer@gmail.com"]);
+
+        $newUser = User::factory()->raw(["email" => "channaveer@gmail.com"]);
+
+        $this->postJson(route("auth.register"), $newUser)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonValidationErrors(["email"]);
     }
 }
