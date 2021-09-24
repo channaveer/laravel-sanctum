@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Events\ResetPasswordEvent;
 use Exception;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\User\ResetPasswordRequest;
-use App\Http\Requests\User\VerifyResetPasswordRequest;
-use App\Services\PasswordResetService;
 use App\Services\UserService;
+use App\Events\ResetPasswordEvent;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use App\Services\PasswordResetService;
 use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Auth\Notifications\ResetPassword;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Requests\User\ResetPasswordRequest;
+use Illuminate\Auth\Notifications\ResetPassword;
+use App\Http\Requests\User\VerifyResetPasswordRequest;
 
 class ResetPasswordController extends Controller
 {
@@ -49,7 +50,7 @@ class ResetPasswordController extends Controller
             $passwordResetService->getByEmailAndToken($request->get("email"), $request->get("token"));
 
             $user = $userService->getByEmail($request->get("email"));
-            $user->password = $request->get("password");
+            $user->password = Hash::make($request->get("password"));
             $user->save();
 
             $passwordResetService->deleteTokensByEmail($user->email);

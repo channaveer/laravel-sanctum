@@ -10,13 +10,15 @@ use App\Http\Controllers\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\User\RegisterUserRequest;
 use App\Services\PasswordResetService;
+use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
     public function register(RegisterUserRequest $request, PasswordResetService $passwordResetService)
     {
         try {
-            $user = User::create($request->validated());
+            $request->request->add(["password" => Hash::make($request->get("password"))]);
+            $user = User::create($request->only(["name", "email", "password"]));
 
             $passwordReset = $passwordResetService->createToken($request->get("email"));
 

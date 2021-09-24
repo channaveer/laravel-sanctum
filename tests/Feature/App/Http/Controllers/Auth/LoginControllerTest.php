@@ -20,10 +20,7 @@ class LoginControllerTest extends TestCase
     {
         $this->markTestIncomplete("Write and test code to limit login attempts.");
 
-        $user = User::factory()
-            ->create([
-                "password" => "password"
-            ]);
+        $user = User::factory()->create();
 
         $this->postJson(route("auth.authenticate"), [
             "email" => $user->email,
@@ -120,10 +117,7 @@ class LoginControllerTest extends TestCase
      */
     public function an_authenticated_user_can_logout()
     {
-        $user = User::factory()
-            ->create([
-                "password" => "password"
-            ]);
+        $user = User::factory()->create();
 
         $loggedInUserResponse = $this->postJson(route("auth.authenticate"), [
             "email" => $user->email,
