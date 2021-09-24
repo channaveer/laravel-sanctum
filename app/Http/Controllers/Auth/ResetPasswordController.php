@@ -50,7 +50,7 @@ class ResetPasswordController extends Controller
             $passwordResetService->getByEmailAndToken($request->get("email"), $request->get("token"));
 
             $user = $userService->getByEmail($request->get("email"));
-            $user->password = Hash::make($request->get("password"));
+            $user->password = $this->encrypt($request->get("password"));
             $user->save();
 
             $passwordResetService->deleteTokensByEmail($user->email);

@@ -17,7 +17,7 @@ class RegisterController extends Controller
     public function register(RegisterUserRequest $request, PasswordResetService $passwordResetService)
     {
         try {
-            $request->request->add(["password" => Hash::make($request->get("password"))]);
+            $request->request->add(["password" => $this->encrypt($request->get("password"))]);
             $user = User::create($request->only(["name", "email", "password"]));
 
             $passwordReset = $passwordResetService->createToken($request->get("email"));
